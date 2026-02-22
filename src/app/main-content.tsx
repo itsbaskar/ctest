@@ -14,6 +14,7 @@ import { CodeEditor } from "@/components/editor/CodeEditor";
 import { PreviewFrame } from "@/components/preview/PreviewFrame";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HeaderActions } from "@/components/HeaderActions";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface MainContentProps {
   user?: {
@@ -42,8 +43,9 @@ export function MainContent({ user, project }: MainContentProps) {
             <ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
               <div className="h-full flex flex-col bg-white">
                 {/* Chat Header */}
-                <div className="h-14 flex items-center px-6 border-b border-neutral-200/60">
+                <div className="h-14 flex items-center justify-between px-6 border-b border-neutral-200/60">
                   <h1 className="text-lg font-semibold text-neutral-900 tracking-tight">React Component Generator</h1>
+                  <ThemeToggle />
                 </div>
 
                 {/* Chat Content */}
