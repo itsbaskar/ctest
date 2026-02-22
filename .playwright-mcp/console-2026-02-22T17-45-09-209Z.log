@@ -1,0 +1,1 @@
+[   65624ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed:  @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5696

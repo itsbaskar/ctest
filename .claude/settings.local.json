@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright",
+      "Bash(tail:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(open:*)",
+      "Bash(sleep 5:*)",
+      "Bash(npm run:*)",
+      "Bash(head:*)",
+      "Bash(ls:*)",
+      "Bash(sqlite3:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(sleep 1:*)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)"
+    ]
+  }
+}
