@@ -44,21 +44,30 @@ vi.mock("@/components/ui/resizable", () => ({
   ResizableHandle: () => <div data-testid="resizable-handle" />,
 }));
 
-vi.mock("@/components/ui/tabs", () => ({
-  Tabs: ({ children, value, onValueChange }: any) => (
-    <div data-testid="tabs" data-value={value}>
-      {typeof children === "function"
-        ? children({ value, onValueChange })
-        : children}
-    </div>
-  ),
-  TabsList: ({ children }: any) => <div data-testid="tabs-list">{children}</div>,
-  TabsTrigger: ({ children, value, ...props }: any) => (
-    <button data-testid={`tab-${value}`} onClick={() => props.onClick?.()} role="tab">
-      {children}
-    </button>
-  ),
-}));
+vi.mock("@/components/ui/tabs", () => {
+  let _onValueChange: ((value: string) => void) | undefined;
+
+  return {
+    Tabs: ({ children, value, onValueChange }: any) => {
+      _onValueChange = onValueChange;
+      return (
+        <div data-testid="tabs" data-value={value}>
+          {children}
+        </div>
+      );
+    },
+    TabsList: ({ children }: any) => <div data-testid="tabs-list">{children}</div>,
+    TabsTrigger: ({ children, value }: any) => (
+      <button
+        data-testid={`tab-${value}`}
+        onClick={() => _onValueChange?.(value)}
+        role="tab"
+      >
+        {children}
+      </button>
+    ),
+  };
+});
 
 import { MainContent } from "../main-content";
 
@@ -123,5 +132,53 @@ describe("MainContent", () => {
     render(<MainContent />);
     expect(screen.queryByTestId("file-tree")).toBeNull();
     expect(screen.queryByTestId("code-editor")).toBeNull();
+  });
+
+  test("clicking Code tab shows file tree and code editor", async () => {
+    const user = userEvent.setup();
+    render(<MainContent />);
+
+    await user.click(screen.getByTestId("tab-code"));
+
+    expect(screen.queryByTestId("preview-frame")).toBeNull();
+    expect(screen.getByTestId("file-tree")).toBeDefined();
+    expect(screen.getByTestId("code-editor")).toBeDefined();
+  });
+
+  test("clicking Preview tab after switching to Code restores preview", async () => {
+    const user = userEvent.setup();
+    render(<MainContent />);
+
+    await user.click(screen.getByTestId("tab-code"));
+    expect(screen.queryByTestId("preview-frame")).toBeNull();
+
+    await user.click(screen.getByTestId("tab-preview"));
+    expect(screen.getByTestId("preview-frame")).toBeDefined();
+    expect(screen.queryByTestId("file-tree")).toBeNull();
+    expect(screen.queryByTestId("code-editor")).toBeNull();
+  });
+
+  test("tabs default active value is preview", () => {
+    render(<MainContent />);
+    expect(screen.getByTestId("tabs").getAttribute("data-value")).toBe("preview");
+  });
+
+  test("tabs active value updates to code when Code tab is clicked", async () => {
+    const user = userEvent.setup();
+    render(<MainContent />);
+
+    await user.click(screen.getByTestId("tab-code"));
+
+    expect(screen.getByTestId("tabs").getAttribute("data-value")).toBe("code");
+  });
+
+  test("tabs active value returns to preview when Preview tab is clicked after switching", async () => {
+    const user = userEvent.setup();
+    render(<MainContent />);
+
+    await user.click(screen.getByTestId("tab-code"));
+    await user.click(screen.getByTestId("tab-preview"));
+
+    expect(screen.getByTestId("tabs").getAttribute("data-value")).toBe("preview");
   });
 });
