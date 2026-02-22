@@ -52,9 +52,10 @@ Open [http://localhost:3000](http://localhost:3000)
 - AI-powered component generation using Claude
 - Live preview with hot reload
 - Virtual file system (no files written to disk)
-- Syntax highlighting and code editor
+- Syntax highlighting and code editor (Monaco)
 - Component persistence for registered users
 - Export generated code
+- Responsive resizable panel layout
 
 ## Tech Stack
 
