@@ -8,11 +8,12 @@ describe("generationPrompt", () => {
 
   test("specifies React and Tailwind for styling", () => {
     expect(generationPrompt).toContain("React");
-    expect(generationPrompt).toContain("Tailwindcss");
+    expect(generationPrompt).toContain("Tailwind CSS");
   });
 
-  test("requires default export from App.jsx", () => {
-    expect(generationPrompt).toContain("default export");
+  test("requires root App.jsx as entrypoint", () => {
+    expect(generationPrompt).toContain("App.jsx");
+    expect(generationPrompt).toContain("entrypoint");
   });
 
   test("specifies @/ import alias", () => {
@@ -24,11 +25,11 @@ describe("generationPrompt", () => {
   });
 
   test("prohibits HTML files", () => {
-    expect(generationPrompt).toContain("Do not create any HTML files");
+    expect(generationPrompt).toContain("Do not create HTML files");
   });
 
-  test("instructs to use tailwind over hardcoded styles", () => {
-    expect(generationPrompt).toContain("not hardcoded styles");
+  test("instructs to use tailwind exclusively", () => {
+    expect(generationPrompt).toContain("Tailwind CSS exclusively");
   });
 
   test("is a non-empty string", () => {

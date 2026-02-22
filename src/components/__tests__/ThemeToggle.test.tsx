@@ -1,5 +1,5 @@
 import { test, expect, describe, beforeEach, vi, afterEach } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // Mock localStorage
@@ -44,14 +44,27 @@ import { ThemeToggle } from "../ThemeToggle";
 
 describe("ThemeToggle", () => {
   beforeEach(() => {
+    cleanup();
     localStorageMock.clear();
-    localStorageMock.getItem.mockClear();
+    localStorageMock.getItem.mockReset();
+    localStorageMock.getItem.mockImplementation((key: string) => null);
     localStorageMock.setItem.mockClear();
-    matchMediaMock.mockClear();
+    matchMediaMock.mockReset();
+    matchMediaMock.mockReturnValue({
+      matches: false,
+      media: "",
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    });
     document.documentElement.classList.remove("dark");
   });
 
   afterEach(() => {
+    cleanup();
     document.documentElement.classList.remove("dark");
   });
 
@@ -99,8 +112,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("moon-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to dark mode" });
+      await user.click(button);
 
       expect(document.documentElement.classList.contains("dark")).toBe(true);
     });
@@ -111,8 +124,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("sun-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to light mode" });
+      await user.click(button);
 
       expect(document.documentElement.classList.contains("dark")).toBe(false);
     });
@@ -122,8 +135,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("moon-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to dark mode" });
+      await user.click(button);
 
       expect(localStorageMock.setItem).toHaveBeenCalledWith("theme", "dark");
     });
@@ -133,8 +146,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("sun-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to light mode" });
+      await user.click(button);
 
       expect(localStorageMock.setItem).toHaveBeenCalledWith("theme", "light");
     });
@@ -144,8 +157,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("moon-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to dark mode" });
+      await user.click(button);
       expect(screen.getByTestId("sun-icon")).toBeDefined();
     });
 
@@ -154,8 +167,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByTestId("sun-icon");
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to light mode" });
+      await user.click(button);
       expect(screen.getByTestId("moon-icon")).toBeDefined();
     });
   });
@@ -180,8 +193,8 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup();
       render(<ThemeToggle />);
 
-      await screen.findByRole("button", { name: "Switch to dark mode" });
-      await user.click(screen.getByRole("button"));
+      const button = await screen.findByRole("button", { name: "Switch to dark mode" });
+      await user.click(button);
       expect(screen.getByRole("button", { name: "Switch to light mode" })).toBeDefined();
     });
   });
