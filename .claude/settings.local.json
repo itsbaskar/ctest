@@ -17,7 +17,13 @@
       "Bash(npm install:*)",
       "Bash(sleep 1:*)",
       "Bash(gh auth:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(gh repo:*)",
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add README.md && git commit -m \"$\\(cat <<'EOF'\ndocs: add CI/CD section to README\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\" && git push -u origin test/claude-workflow 2>&1)",
+      "Bash(gh pr:*)",
+      "Bash(git add:*)"
     ]
   }
 }
