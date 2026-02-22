@@ -36,6 +36,10 @@ vi.mock("@/components/HeaderActions", () => ({
   ),
 }));
 
+vi.mock("@/components/ThemeToggle", () => ({
+  ThemeToggle: () => <button data-testid="theme-toggle">Toggle</button>,
+}));
+
 vi.mock("@/components/ui/resizable", () => ({
   ResizablePanelGroup: ({ children, ...props }: any) => (
     <div data-testid="resizable-group" data-direction={props.direction}>{children}</div>
